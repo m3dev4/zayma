@@ -24,7 +24,7 @@ const Page = () => {
   ];
 
   return (
-    <div className="w-full min-h-screen bg-primary">
+    <div className="w-full min-h-screen bg-primary overflow-hidden">
       <div className="flex w-full p-5 m-auto">
         <nav className="flex justify-between items-center flex-row w-full">
           <ul className="flex items-center justify-center gap-8 px-8">
@@ -56,7 +56,7 @@ const Page = () => {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <Menu.Items className="absolute left-0 mt-2 w-[500px] h-[500px] origin-top-left bg-[#2A2A2A] rounded-lg shadow-xl ring-1 ring-black/5 focus:outline-none backdrop-blur-sm">
+                <Menu.Items className="absolute z-10 left-0 mt-2 w-[500px] h-[500px] origin-top-left bg-[#2A2A2A] rounded-lg shadow-xl ring-1 ring-black/5 focus:outline-none backdrop-blur-sm">
                   <div className="px-6 py-4 flex justify-between items-start w-full">
                     <div className="flex-col flex justify-center space-y-2">
                       <h1 className="text-sans font-bold text-2xl text-white mb-6 flex items-center gap-2">
@@ -276,7 +276,7 @@ const Page = () => {
                   leaveFrom="transform opacity-100 scale-100"
                   leaveTo="transform opacity-0 scale-95"
                 >
-                  <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right bg-[#2A2A2A] rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <Menu.Items className="absolute z-10 right-0 mt-2 w-56 origin-top-right bg-[#2A2A2A] rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="px-1 py-1">
                       <Menu.Item>
                         {({ active }) => (
@@ -284,7 +284,7 @@ const Page = () => {
                             href="/account"
                             className={`${
                               active ? 'bg-[#363636]' : ''
-                            } group flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white hover:shadow-lg transition-all duration-200`}
+                            } group flex font-bold items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white hover:shadow-lg transition-all duration-200`}
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -309,7 +309,7 @@ const Page = () => {
                             onClick={handleLogout}
                             className={`${
                               active ? 'bg-[#363636]' : ''
-                            } group flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white hover:shadow-lg transition-all duration-200`}
+                            } group flex font-bold w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white hover:shadow-lg transition-all duration-200`}
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -357,7 +357,7 @@ const Page = () => {
           </ul>
         </nav>
       </div>
-      <div className="">
+      <div className="w-full h-full sticky m-5 overflow-hidden px-16">
         <NavItem />
       </div>
     </div>

@@ -20,7 +20,8 @@ export default {
 				]
 			},
 			fontSize: {
-				customSearch: '1.35rem'
+				customSearch: '1.35rem',
+				title: '12px'
 			},
 			padding: {
 				customPad: '.35em .35em 0'
