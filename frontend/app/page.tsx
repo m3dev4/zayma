@@ -1,110 +1,367 @@
 'use client';
+import React, { Fragment } from 'react';
 import Link from 'next/link';
-import React from 'react';
-import { Button } from '@headlessui/react';
+import { Button, Menu, Transition } from '@headlessui/react';
 import authApiStore from '@/api/zustand/authApi';
-import DashboardLayoutAccountSidebar from '@/components/siebar';
+import NavItem from '@/components/navItem';
 
-function Home() {
-  const { logout, user } = authApiStore();
+const Page = () => {
+  const { user, logout } = authApiStore();
 
   const handleLogout = async () => {
     await logout();
   };
+
+  const shopMenuItems = [
+    { name: 'Découvrir', href: '/products' },
+    { name: 'Liste de souhaits', href: '/wishlist' },
+    { name: 'Panier', href: '/cart' },
+  ];
+
+  const createMenuItems = [
+    { name: 'Créer une boutique', href: '/create-store', requireAuth: true },
+    { name: 'Gérer ma boutique', href: '/manage-store', requireAuth: true },
+  ];
+
   return (
-    <>
-      {user ? (
-        <div className="w-full h-full overflow-hidden fixed flex justify-between">
-          <DashboardLayoutAccountSidebar />
-        </div>
-      ) : (
-        <div className="flex justify-center items-center w-full h-full">
-          <div className="flex justify-center items-center p-7 m-auto">
-            <nav className="flex justify-between items-center gap-8">
-              <h1 className="font-poppins text-2xl font-ultrabold absolute left-7">
-                ZAYMA
-              </h1>
-              <ul className="flex justify-between items-center gap-8">
-                <li className="font-sans">
-                  <Link href="/">Accueil</Link>
-                </li>
-                <li className="font-sans">
-                  <Link href="/product">Produits</Link>
-                </li>
-                <li className="font-sans">
-                  <Link href="/favories">Favories</Link>
-                </li>
-                <li className="font-sans">
-                  <Link href="/commandes">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className="size-6"
-                    >
-                      <path d="M2.25 2.25a.75.75 0 0 0 0 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 0 0-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 0 0 0-1.5H5.378A2.25 2.25 0 0 1 7.5 15h11.218a.75.75 0 0 0 .674-.421 60.358 60.358 0 0 0 2.96-7.228.75.75 0 0 0-.525-.965A60.864 60.864 0 0 0 5.68 4.509l-.232-.867A1.875 1.875 0 0 0 3.636 2.25H2.25ZM3.75 20.25a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM16.5 20.25a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" />
-                    </svg>
-                  </Link>
-                </li>
-                <li className="absolute right-7">
+    <div className="w-full min-h-screen bg-primary">
+      <div className="flex w-full p-5 m-auto">
+        <nav className="flex justify-between items-center flex-row w-full">
+          <ul className="flex items-center justify-center gap-8 px-8">
+            {/* Logo/Brand */}
+            <Menu as="div" className="relative">
+              <Menu.Button className="font-poppins text-white font-bold text-xl hover:text-gray-300 flex gap-1">
+                Zayma
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-chevron-down relative top-2"
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </Menu.Button>
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                <Menu.Items className="absolute left-0 mt-2 w-[500px] h-[500px] origin-top-left bg-[#2A2A2A] rounded-lg shadow-xl ring-1 ring-black/5 focus:outline-none backdrop-blur-sm">
+                  <div className="px-6 py-4 flex justify-between items-start w-full">
+                    <div className="flex-col flex justify-center space-y-2">
+                      <h1 className="text-sans font-bold text-2xl text-white mb-6 flex items-center gap-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          className="text-blue-500"
+                        >
+                          <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z" />
+                          <path d="m3 9 2.45-4.9A2 2 0 0 1 7.24 3h9.52a2 2 0 0 1 1.8 1.1L21 9" />
+                          <path d="M12 3v6" />
+                        </svg>
+                        Shop
+                      </h1>
+                      {shopMenuItems.map((item) => (
+                        <Menu.Item key={item.name}>
+                          {({ active }) => (
+                            <Link
+                              href={item.href}
+                              className={`${
+                                active ? 'bg-[#363636]' : ''
+                              } group flex font-semibold font-poppins items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white hover:shadow-lg transition-all duration-200`}
+                            >
+                              {item.name === 'Découvrir' && (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  className="text-green-500"
+                                >
+                                  <circle cx="12" cy="12" r="10" />
+                                  <path d="m9 12 2 2 4-4" />
+                                </svg>
+                              )}
+                              {item.name === 'Liste de souhaits' && (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  className="text-red-500"
+                                >
+                                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                                </svg>
+                              )}
+                              {item.name === 'Panier' && (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  className="text-yellow-500"
+                                >
+                                  <circle cx="8" cy="21" r="1" />
+                                  <circle cx="19" cy="21" r="1" />
+                                  <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+                                </svg>
+                              )}
+                              {item.name}
+                            </Link>
+                          )}
+                        </Menu.Item>
+                      ))}
+                    </div>
+
+                    {/* Barre verticale de séparation avec effet de gradient */}
+                    <div className="w-[1px] h-[400px] bg-gradient-to-b from-gray-600/20 via-gray-600 to-gray-600/20 mx-8"></div>
+
+                    <div className="flex-col flex justify-center space-y-2">
+                      <h1 className="text-sans font-bold text-2xl text-white mb-6 flex items-center gap-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          className="text-purple-500"
+                        >
+                          <path d="M12 20h9" />
+                          <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                        </svg>
+                        Créer
+                      </h1>
+                      {user ? (
+                        <Link
+                          href="/create-store"
+                          className="group flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white hover:bg-[#363636] hover:shadow-lg transition-all duration-200"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            className="text-orange-500"
+                          >
+                            <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z" />
+                            <path d="M3 9V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3" />
+                            <path d="M12 11v6" />
+                            <path d="M9 14h6" />
+                          </svg>
+                          Créer une boutique
+                        </Link>
+                      ) : (
+                        <button
+                          onClick={() =>
+                            alert(
+                              'Veuillez vous connecter pour créer une boutique',
+                            )
+                          }
+                          className="group font-poppins font-semibold flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white hover:bg-[#363636] hover:shadow-lg transition-all duration-200"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            className="text-orange-500"
+                          >
+                            <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z" />
+                            <path d="M3 9V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3" />
+                            <path d="M12 11v6" />
+                            <path d="M9 14h6" />
+                          </svg>
+                          Créer une boutique
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </Menu.Items>
+              </Transition>
+            </Menu>
+
+            {/* Shop Menu */}
+            <Link
+              href="/support"
+              className="font-sans text-white tracking-wide uppercase font-semibold text-3xl hover:text-gray-300"
+            >
+              Store
+            </Link>
+
+            <Link
+              href="/support"
+              className="font-sans text-white tracking-wide hover:text-gray-300"
+            >
+              Assistance
+            </Link>
+          </ul>
+
+          <ul className="flex justify-between items-center gap-8 pr-8">
+            <li>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-globe text-white hover:text-gray-300 cursor-pointer"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+                <path d="M2 12h20" />
+              </svg>
+            </li>
+
+            {user ? (
+              <Menu as="div" className="relative">
+                <Menu.Button className="text-white hover:text-gray-300 flex gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    />
+                  </svg>
+                  {user.firstName}
+                </Menu.Button>
+                <Transition
+                  as={Fragment}
+                  enter="transition ease-out duration-100"
+                  enterFrom="transform opacity-0 scale-95"
+                  enterTo="transform opacity-100 scale-100"
+                  leave="transition ease-in duration-75"
+                  leaveFrom="transform opacity-100 scale-100"
+                  leaveTo="transform opacity-0 scale-95"
+                >
+                  <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right bg-[#2A2A2A] rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <div className="px-1 py-1">
+                      <Menu.Item>
+                        {({ active }) => (
+                          <Link
+                            href="/account"
+                            className={`${
+                              active ? 'bg-[#363636]' : ''
+                            } group flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white hover:shadow-lg transition-all duration-200`}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="18"
+                              height="18"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              className="text-blue-500"
+                            >
+                              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                              <circle cx="12" cy="7" r="4" />
+                            </svg>
+                            Compte
+                          </Link>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <button
+                            onClick={handleLogout}
+                            className={`${
+                              active ? 'bg-[#363636]' : ''
+                            } group flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white hover:shadow-lg transition-all duration-200`}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="18"
+                              height="18"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              className="text-red-500"
+                            >
+                              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                              <polyline points="16 17 21 12 16 7" />
+                              <line x1="21" y1="12" x2="9" y2="12" />
+                            </svg>
+                            Déconnexion
+                          </button>
+                        )}
+                      </Menu.Item>
+                    </div>
+                  </Menu.Items>
+                </Transition>
+              </Menu>
+            ) : (
+              <>
+                <li>
                   <Link href="/pages/login">
-                    <Button className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white">
-                      Login
+                    <Button className="bg-neutral-600 px-3 py-1 rounded-lg text-white hover:bg-neutral-700 text-sans font-semibold">
+                      Se connecter
                     </Button>
                   </Link>
                 </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      )}
-    </>
-  );
-}
-
-export default Home;
-
-{
-  /* <div className="flex justify-center items-center w-full h-full">
-      <div className="flex justify-center items-center p-7 m-auto">
-        <nav className="flex justify-between items-center gap-8">
-          <h1 className="font-poppins text-2xl font-ultrabold absolute left-7">
-            ZAYMA
-          </h1>
-          <ul className="flex justify-between items-center gap-8">
-            <li className="font-sans">
-              <Link href="/">Accueil</Link>
-            </li>
-            <li className="text-sans">
-              <Link href="/product">Produits</Link>
-            </li>
-            <li className="text-sans">
-              <Link href="/favories">Favories</Link>
-            </li>
-            <li className="text-sans">
-              <Link href="/commandes">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="size-6"
-                >
-                  <path d="M2.25 2.25a.75.75 0 0 0 0 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 0 0-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 0 0 0-1.5H5.378A2.25 2.25 0 0 1 7.5 15h11.218a.75.75 0 0 0 .674-.421 60.358 60.358 0 0 0 2.96-7.228.75.75 0 0 0-.525-.965A60.864 60.864 0 0 0 5.68 4.509l-.232-.867A1.875 1.875 0 0 0 3.636 2.25H2.25ZM3.75 20.25a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM16.5 20.25a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" />
-                </svg>
-              </Link>
-            </li>
-
-            <li className="absolute right-7">
-              
-                <Link href="/pages/login">
-                  <Button className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white">
-                    Login
+                <li>
+                  <Button
+                    onClick={() =>
+                      alert('Veuillez vous connecter pour créer une boutique')
+                    }
+                    className="bg-blue-600 px-3 py-1 rounded-lg text-white hover:bg-blue-700 text-sans font-semibold"
+                  >
+                    Créer une boutique
                   </Button>
-                </Link>
-           
-            </li>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
       </div>
-    </div> */
-}
+      <div className="">
+        <NavItem />
+      </div>
+    </div>
+  );
+};
+
+export default Page;
