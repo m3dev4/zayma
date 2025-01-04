@@ -18,11 +18,6 @@ const Page = () => {
     { name: 'Panier', href: '/cart' },
   ];
 
-  const createMenuItems = [
-    { name: 'Créer une boutique', href: '/create-store', requireAuth: true },
-    { name: 'Gérer ma boutique', href: '/manage-store', requireAuth: true },
-  ];
-
   return (
     <div className="w-full min-h-screen bg-primary overflow-hidden">
       <div className="flex w-full p-5 m-auto">
@@ -159,7 +154,7 @@ const Page = () => {
                       </h1>
                       {user ? (
                         <Link
-                          href="/create-store"
+                          href="pages/createStore"
                           className="group flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white hover:bg-[#363636] hover:shadow-lg transition-all duration-200"
                         >
                           <svg
