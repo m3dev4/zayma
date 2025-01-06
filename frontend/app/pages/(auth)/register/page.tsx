@@ -4,7 +4,7 @@ import authApiStore from '@/api/zustand/authApi';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterInput, registerSchema } from '@/validations/authValidation';
 import Link from 'next/link';
-import {Input} from '@headlessui/react';
+import { Input } from '@headlessui/react';
 import { FcGoogle } from 'react-icons/fc';
 import { useRouter } from 'next/navigation';
 import toast, { Toaster } from 'react-hot-toast';
@@ -27,8 +27,9 @@ const RegisterPage = () => {
       router.push('/');
       toast.success('Inscription reussie');
     } catch (error) {
-        toast.error('Inscription echouee');
-      setError('root', { message: 'Échec de l\'inscription' });
+      toast.error('Inscription echouee');
+      console.error('inscription echouee');
+      setError('root', { message: "Échec de l'inscription" });
     }
   };
 
@@ -39,14 +40,14 @@ const RegisterPage = () => {
   return (
     <div className="min-h-screen flex">
       {/* Partie gauche - Formulaire d'inscription */}
-      <Toaster
-       position='top-right'
-      />
+      <Toaster position="top-right" />
       <div className="w-1/2 flex items-center justify-center p-6">
         <div className="max-w-md w-full space-y-6">
           <div className="text-center space-y-2">
             <h1 className="text-2xl font-semibold">Create Account</h1>
-            <p className="text-gray-500">Start your shopping journey with Zayma</p>
+            <p className="text-gray-500">
+              Start your shopping journey with Zayma
+            </p>
           </div>
 
           <div className="space-y-4">
@@ -73,17 +74,25 @@ const RegisterPage = () => {
                 placeholder="type your first name"
                 className="w-full px-4 py-2.5 rounded-lg border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-colors"
               />
-              {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>}
+              {errors.firstName && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.firstName.message}
+                </p>
+              )}
             </div>
 
-             <div>
+            <div>
               <Input
                 {...register('lastName')}
                 type="text"
                 placeholder="type your last name"
                 className="w-full px-4 py-2.5 rounded-lg border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-colors"
               />
-              {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>}
+              {errors.lastName && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.lastName.message}
+                </p>
+              )}
             </div>
 
             <div>
@@ -93,7 +102,11 @@ const RegisterPage = () => {
                 placeholder="Email"
                 className="w-full px-4 py-2.5 rounded-lg border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-colors"
               />
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
 
             <div>
@@ -103,9 +116,12 @@ const RegisterPage = () => {
                 placeholder="Password"
                 className="w-full px-4 py-2.5 rounded-lg border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-colors"
               />
-              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
-
 
             <button
               type="submit"

@@ -27,6 +27,7 @@ const LoginPage = () => {
       router.push('/');
     } catch (error) {
       toast.error('Identifiants invalides');
+      console.error('inscription echouee');
       setError('root', { message: 'Identifiants invalides' });
     }
   };
