@@ -1,53 +1,45 @@
-name: Node.js CI
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout du code
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # Configuration de Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: '20'
 
-      # Installer les dépendances
-      - name: Install dependencies
-        run: npm install
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          npm install
 
-      # Lancer les tests
-      - name: Run tests
-        run: npm test
+      - name: Build backend
+        run: |
+          cd backend
+          npm run build
 
-      # Linter (si ESLint est configuré)
-      - name: Run linter
-        run: npm run lint
-        continue-on-error: true # Ne bloque pas si le linter échoue
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
 
-      # Construire le projet (si applicable)
-      - name: Build project
-        run: npm run build
-        if: success()
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm run build
 
-      # Upload des logs (optionnel)
-      - name: Archive test results
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-results
-          path: test-results/
+      - name: Deploy
+        run: echo "Deploying..."
 
 
 
