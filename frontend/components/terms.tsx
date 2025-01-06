@@ -1,9 +1,7 @@
-import { Button } from '@headlessui/react';
+/* eslint-disable react/no-unescaped-entities */
 import React, { useState } from 'react';
 
 const Terms = () => {
-  const [acceptTerms, setAcceptTerms] = useState(false);
-
   return (
     <div>
       <h2 className="text-2xl font-poppins mb-6 text-white font-semibold">
