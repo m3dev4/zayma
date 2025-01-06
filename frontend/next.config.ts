@@ -7,6 +7,14 @@ const nextConfig: NextConfig = {
   webpack: (config, { isServer }) => {
 
 
+
+
+    if (process.env.ANALYZE === 'true' && !isServer) {
+      const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+      config.plugins.push(new BundleAnalyzerPlugin());
+    }
+
+
     config.module.rules.push({
       test: /\.(png|jpe?g|gif|svg|webp)$/i,
       use: [
