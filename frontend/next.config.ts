@@ -1,21 +1,11 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 import type { NextConfig } from "next";
 import path from "path";
-import CompressionPlugin from 'compression-webpack-plugin';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.plugins.push(
-        new CompressionPlugin({
-          algorithm: 'gzip',
-          test: /\.(js|css|html|svg)$/,
-          threshold: 10240,
-          minRatio: 0.8,
-        }),
-      );
-    }
+
 
     config.module.rules.push({
       test: /\.(png|jpe?g|gif|svg|webp)$/i,
