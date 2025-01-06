@@ -1,22 +1,20 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 import type { NextConfig } from "next";
 import path from "path";
+import CompressionPlugin from 'compression-webpack-plugin';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true, // Active les vérifications supplémentaires pour une meilleure expérience de développement
   webpack: (config, { isServer }) => {
     // Compression Brotli et Gzip
     if (!isServer) {
-      const CompressionPlugin = require("compression-webpack-plugin");
       config.plugins.push(
         new CompressionPlugin({
-          algorithm: "gzip",
-          filename: "[path][base].gz", // Corrigé pour la compatibilité
+          algorithm: 'gzip',
+          test: /\.(js|css|html|svg)$/,
+          threshold: 10240,
+          minRatio: 0.8,
         }),
-        new CompressionPlugin({
-          algorithm: "brotliCompress",
-          filename: "[path][base].br", // Corrigé pour la compatibilité
-        })
       );
 
       // Optimisation des images
