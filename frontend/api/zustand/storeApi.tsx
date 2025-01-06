@@ -14,30 +14,16 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config: AxiosRequestConfig) => {
-  try {
-    const userInfoStr = localStorage.getItem('userInfo');
-    if (userInfoStr) {
-      const userInfo = JSON.parse(userInfoStr);
-      console.log('UserInfo from localStorage:', userInfo);
-      console.log('Token structure:', userInfo.token);
+  const token = document.cookie
+    .split('; ')
+    .find((row) => row.startsWith('jwt='))
+    ?.split('=')[1];
 
-      if (userInfo.token) {
-        config.headers = config.headers || {};
-        const tokenValue = userInfo.token.startsWith('Bearer ')
-          ? userInfo.token
-          : `Bearer ${userInfo.token}`;
-        config.headers.Authorization = tokenValue;
-        console.log(
-          'Final Authorization header:',
-          config.headers.Authorization,
-        );
-      }
-    }
-    return config;
-  } catch (error) {
-    console.error("Erreur lors de l'ajout du token:", error);
-    return config;
+  if (token) {
+    config.headers = config.headers || {};
+    config.headers.Authorization = `Bearer ${token}`;
   }
+  return config;
 });
 
 interface StoreState extends StoreFormState {

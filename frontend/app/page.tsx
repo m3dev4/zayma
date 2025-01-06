@@ -1,12 +1,42 @@
 'use client';
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button, Menu, Transition } from '@headlessui/react';
 import authApiStore from '@/api/zustand/authApi';
+import { useStore } from '@/api/zustand/storeApi';
 import NavItem from '@/components/navItem';
+import { ChevronRight } from 'lucide-react';
+import type { Store } from '@/types';
+import { useRouter } from 'next/navigation';
 
 const Page = () => {
   const { user, logout } = authApiStore();
+  const { getMyStores } = useStore();
+  const [userStore, setUserStore] = useState<Store | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchUserStore = async () => {
+      if (user) {
+        try {
+          const stores = await getMyStores();
+          if (stores && stores.length > 0) {
+            setUserStore(stores[0]);
+          }
+        } catch (error: any) {
+          console.error(
+            'Erreur lors de la récupération de la boutique:',
+            error,
+          );
+          if (error.response?.status === 401) {
+            logout();
+            router.push('/pages/login');
+          }
+        }
+      }
+    };
+    fetchUserStore();
+  }, [user, getMyStores]);
 
   const handleLogout = async () => {
     await logout();
@@ -150,12 +180,161 @@ const Page = () => {
                           <path d="M12 20h9" />
                           <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
                         </svg>
-                        Créer
+                        {userStore ? 'Votre boutique' : 'Créer'}
                       </h1>
-                      {user ? (
+                      {user && userStore ? (
+                        <>
+                          <Link
+                            href={`/pages/myStore/${userStore._id}/dashboard`}
+                            className="group flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white hover:bg-[#363636]"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="18"
+                              height="18"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              className="text-orange-500"
+                            >
+                              <rect width="18" height="18" x="3" y="3" rx="2" />
+                              <path d="M3 9h18" />
+                              <path d="M9 21V9" />
+                            </svg>
+                            Dashboard
+                          </Link>
+
+                          {/* Menu Gérer votre boutique */}
+                          <Menu as="div" className="relative w-full">
+                            <Menu.Button className="w-full group flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white hover:bg-[#363636]">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                className="text-blue-500"
+                              >
+                                <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z" />
+                                <path d="M3 9V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3" />
+                              </svg>
+                              Gérer votre boutique
+                              <ChevronRight className="ml-auto h-4 w-4" />
+                            </Menu.Button>
+                            <Menu.Items className="absolute left-full top-0 ml-2 w-48 rounded-md bg-[#2A2A2A] shadow-lg">
+                              <Menu.Item>
+                                <Link
+                                  href={`/pages/myStore/${userStore._id}/update`}
+                                  className="block px-4 py-2 text-sm text-white hover:bg-[#363636]"
+                                >
+                                  Mise à jour
+                                </Link>
+                              </Menu.Item>
+                              <Menu.Item>
+                                <Link
+                                  href="pages/myStore/delete"
+                                  className="block px-4 py-2 text-sm text-white hover:bg-[#363636]"
+                                >
+                                  Supprimer
+                                </Link>
+                              </Menu.Item>
+                            </Menu.Items>
+                          </Menu>
+
+                          {/* Menu Mes produits */}
+                          <Menu as="div" className="relative w-full">
+                            <Menu.Button className="w-full group flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white hover:bg-[#363636]">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                className="text-green-500"
+                              >
+                                <path d="M20.91 8.84 8.56 2.23a1.93 1.93 0 0 0-1.81 0L3.1 4.13a2.12 2.12 0 0 0-.05 3.69l12.22 6.93a2 2 0 0 0 1.94 0L21 12.51a2.12 2.12 0 0 0-.09-3.67Z" />
+                                <path d="m3.09 8.84 12.35-6.61a1.93 1.93 0 0 1 1.81 0l3.65 1.9a2.12 2.12 0 0 1 .1 3.69L8.73 14.75a2 2 0 0 1-1.94 0L3 12.51a2.12 2.12 0 0 1 .09-3.67Z" />
+                              </svg>
+                              Mes produits
+                              <ChevronRight className="ml-auto h-4 w-4" />
+                            </Menu.Button>
+                            <Menu.Items className="absolute left-full top-0 ml-2 w-48 rounded-md bg-[#2A2A2A] shadow-lg">
+                              <Menu.Item>
+                                <Link
+                                  href={`/pages/myStore/${userStore._id}/products/add`}
+                                  className="block px-4 py-2 text-sm text-white hover:bg-[#363636]"
+                                >
+                                  Ajouter un produit
+                                </Link>
+                              </Menu.Item>
+                              <Menu.Item>
+                                <Link
+                                  href={`/pages/myStore/${userStore._id}/products`}
+                                  className="block px-4 py-2 text-sm text-white hover:bg-[#363636]"
+                                >
+                                  Modifier un produit
+                                </Link>
+                              </Menu.Item>
+                              <Menu.Item>
+                                <Link
+                                  href={`/pages/myStore/${userStore._id}/products`}
+                                  className="block px-4 py-2 text-sm text-white hover:bg-[#363636]"
+                                >
+                                  Supprimer un produit
+                                </Link>
+                              </Menu.Item>
+                            </Menu.Items>
+                          </Menu>
+
+                          {/* Menu Gérer mes commandes */}
+                          <Menu as="div" className="relative w-full">
+                            <Menu.Button className="w-full group flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white hover:bg-[#363636]">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                className="text-yellow-500"
+                              >
+                                <circle cx="8" cy="21" r="1" />
+                                <circle cx="19" cy="21" r="1" />
+                                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+                              </svg>
+                              Gérer mes commandes
+                              <ChevronRight className="ml-auto h-4 w-4" />
+                            </Menu.Button>
+                            <Menu.Items className="absolute left-full top-0 ml-2 w-48 rounded-md bg-[#2A2A2A] shadow-lg">
+                              <Menu.Item>
+                                <Link
+                                  href={`/pages/myStore/${userStore._id}/orders`}
+                                  className="block px-4 py-2 text-sm text-white hover:bg-[#363636]"
+                                >
+                                  Gérer les commandes
+                                </Link>
+                              </Menu.Item>
+                              <Menu.Item>
+                                <Link
+                                  href={`/pages/myStore/${userStore._id}/orders/history`}
+                                  className="block px-4 py-2 text-sm text-white hover:bg-[#363636]"
+                                >
+                                  Historique des commandes
+                                </Link>
+                              </Menu.Item>
+                            </Menu.Items>
+                          </Menu>
+                        </>
+                      ) : (
                         <Link
-                          href="pages/createStore"
-                          className="group flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white hover:bg-[#363636] hover:shadow-lg transition-all duration-200"
+                          href="/pages/createStore"
+                          className="group flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white hover:bg-[#363636]"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -174,32 +353,6 @@ const Page = () => {
                           </svg>
                           Créer une boutique
                         </Link>
-                      ) : (
-                        <button
-                          onClick={() =>
-                            alert(
-                              'Veuillez vous connecter pour créer une boutique',
-                            )
-                          }
-                          className="group font-poppins font-semibold flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white hover:bg-[#363636] hover:shadow-lg transition-all duration-200"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="18"
-                            height="18"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            className="text-orange-500"
-                          >
-                            <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z" />
-                            <path d="M3 9V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3" />
-                            <path d="M12 11v6" />
-                            <path d="M9 14h6" />
-                          </svg>
-                          Créer une boutique
-                        </button>
                       )}
                     </div>
                   </div>

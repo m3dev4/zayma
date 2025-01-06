@@ -11,10 +11,10 @@ export interface CreateStorePayload {
 }
 
 export interface Store {
-    _id?: string
+    _id: string
     name: string
     description: string
-    logo: string
+    logo?: string
     owner: string
     isActive: boolean
     link?: string

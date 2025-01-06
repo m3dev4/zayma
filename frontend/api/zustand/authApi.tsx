@@ -94,42 +94,35 @@ const authApiStore = create(
         set({ loading: true, error: null });
         try {
           const response = await api.post('/login', userData);
-          console.log('Réponse login brute:', response.data);
+          const data = response.data;
 
-          if (!response.data) {
-            throw new Error('Pas de données reçues du serveur');
+          if (!data || !data.token) {
+            throw new Error('Token manquant dans la réponse');
           }
 
-          // Construction de l'objet user
-          const user = {
-            firstName: response.data.firstName,
-            lastName: response.data.lastName,
-            email: response.data.email,
-            role: response.data.role,
+          // Stocker les informations utilisateur dans le localStorage
+          const userInfo = {
+            _id: data._id,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            role: data.role,
+            isAdmin: data.isAdmin,
           };
-
-          // Utiliser le token JWT au lieu de l'ID
-          const token = response.data.token;
-          if (!token) {
-            console.error('Token manquant dans la réponse:', response.data);
-            throw new Error(
-              "Token d'authentification manquant dans la réponse",
-            );
-          }
-
-          const userInfo = { user, token };
-          console.log('Structure à sauvegarder dans localStorage:', userInfo);
 
           localStorage.setItem('userInfo', JSON.stringify(userInfo));
 
-          set({ user, token, loading: false });
-          return user;
-        } catch (error: any) {
-          console.error('Erreur login détaillée:', {
-            message: error.message,
-            response: error.response?.data,
-            status: error.response?.status,
+          // Définir le cookie JWT manuellement
+          document.cookie = `jwt=${data.token}; path=/; max-age=${30 * 24 * 60 * 60}; SameSite=Lax`;
+
+          set({
+            user: userInfo,
+            token: data.token,
+            loading: false,
           });
+
+          return userInfo;
+        } catch (error: any) {
           set({
             error: error.response?.data?.message || 'Identifiants invalides',
             loading: false,
@@ -144,7 +137,10 @@ const authApiStore = create(
         } catch (error) {
           console.error('Erreur lors de la déconnexion:', error);
         } finally {
-          // Suppression explicite du localStorage
+          // Supprimer le cookie JWT
+          document.cookie =
+            'jwt=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+          // Supprimer les données du localStorage
           localStorage.removeItem('userInfo');
 
           set({

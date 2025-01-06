@@ -10,6 +10,7 @@ import {
   getStoreStats,
   toggleStoreStatus,
   adminDeleteStore,
+  getMyStores,
 } from "../controllers/storeController.js";
 import checkOwnership from "../middleware/checkStoreOwnership.js";
 import { isAdmin, protect } from "../middleware/authMiddleware.js";
@@ -22,6 +23,8 @@ router
   .route("/")
   .post(protect, uploadStoreLogo, createStoreHandler)
   .get(getStores);
+
+router.get("/mystores", protect, getMyStores);
 router
   .route("/:id")
   .get(getStoreById)

@@ -3,22 +3,22 @@
 
 import asyncHandler from "../middleware/asyncHandler.js";
 import createStore from "../models/createStore.js";
-import cloudinary from '../uploads/config/cloudinary.js';
-import fs from 'fs';
+import cloudinary from "../uploads/config/cloudinary.js";
+import fs from "fs";
 
 // @desc    Créer une nouvelle boutique
 // @route   POST /api/stores
 // @access  Private
 const createStoreHandler = asyncHandler(async (req, res) => {
   const { name, description } = req.body;
-  
+
   try {
-    console.log('File to upload:', req.file);
-    
+    console.log("File to upload:", req.file);
+
     // Upload vers Cloudinary
     const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: 'zayma/store-logos',
-      transformation: [{ width: 500, height: 500, crop: 'fill' }]
+      folder: "zayma/store-logos",
+      transformation: [{ width: 500, height: 500, crop: "fill" }],
     });
 
     // Supprimer le fichier temporaire après l'upload
@@ -35,7 +35,7 @@ const createStoreHandler = asyncHandler(async (req, res) => {
       res.status(201).json(store);
     } else {
       await cloudinary.uploader.destroy(result.public_id);
-      throw new Error('Échec de la création de la boutique');
+      throw new Error("Échec de la création de la boutique");
     }
   } catch (error) {
     // Si le fichier existe toujours, le supprimer
@@ -43,7 +43,9 @@ const createStoreHandler = asyncHandler(async (req, res) => {
       fs.unlinkSync(req.file.path);
     }
     res.status(400);
-    throw new Error(error.message || 'Erreur lors de la création de la boutique');
+    throw new Error(
+      error.message || "Erreur lors de la création de la boutique"
+    );
   }
 });
 
@@ -73,7 +75,7 @@ const updateStore = asyncHandler(async (req, res) => {
     // Si un nouveau logo est uploadé
     if (req.file) {
       // Supprimer l'ancien logo de Cloudinary
-      const oldLogoPublicId = store.logo.split('/').pop().split('.')[0];
+      const oldLogoPublicId = store.logo.split("/").pop().split(".")[0];
       await cloudinary.uploader.destroy(oldLogoPublicId);
       store.logo = req.file.path;
     }
@@ -89,7 +91,7 @@ const updateStore = asyncHandler(async (req, res) => {
       await cloudinary.uploader.destroy(req.file.filename);
     }
     res.status(404);
-    throw new Error('Boutique non trouvée');
+    throw new Error("Boutique non trouvée");
   }
 });
 
@@ -147,9 +149,14 @@ const getStores = asyncHandler(async (req, res) => {
 // @access  Private
 const getMyStores = asyncHandler(async (req, res) => {
   const stores = await createStore.find({ owner: req.user._id });
+
+  if (!stores) {
+    res.status(404);
+    throw new Error("Aucune boutique trouvée");
+  }
+
   res.json(stores);
 });
-
 // @desc    Admin: Obtenir toutes les boutiques
 // @route   GET /api/stores/admin/all
 // @access  Private/Admin
