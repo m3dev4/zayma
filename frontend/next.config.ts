@@ -4,17 +4,7 @@ import path from "path";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  webpack: (config, { isServer }) => {
-
-
-
-
-    if (process.env.ANALYZE === 'true' && !isServer) {
-      const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
-      config.plugins.push(new BundleAnalyzerPlugin());
-    }
-
-
+  webpack: (config) => {
     config.module.rules.push({
       test: /\.(png|jpe?g|gif|svg|webp)$/i,
       use: [
@@ -39,27 +29,6 @@ const nextConfig: NextConfig = {
       ],
     });
 
-    const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
-    if (!isServer) {
-      config.plugins.push(new BundleAnalyzerPlugin());
-    }
-
-    config.module.rules.push({
-      test: /\.css$/,
-      use: [
-        "style-loader",
-        "css-loader",
-        {
-          loader: "postcss-loader",
-          options: {
-            postcssOptions: {
-              plugins: ["tailwindcss", "autoprefixer"],
-            },
-          },
-        },
-      ],
-    });
-
     config.resolve.alias = {
       ...config.resolve.alias,
       "@components": path.resolve(__dirname, "components/"),
@@ -69,5 +38,6 @@ const nextConfig: NextConfig = {
     return config;
   },
 };
+
 
 export default nextConfig;
