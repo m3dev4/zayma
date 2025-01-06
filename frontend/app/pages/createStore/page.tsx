@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-const createStore = () => {
+const CreateStore = () => {
   const router = useRouter();
   const [step, setStep] = useState<
     'terms' | 'name' | 'description' | 'logo' | 'summary'
@@ -280,4 +280,4 @@ const createStore = () => {
   );
 };
 
-export default createStore;
+export default CreateStore;
