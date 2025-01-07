@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 'use client';
 import { useForm } from 'react-hook-form';
 import authApiStore from '@/api/zustand/authApi';
@@ -111,7 +112,7 @@ const LoginPage = () => {
           </button>
 
           <p className="text-center text-gray-600 text-sm">
-            Don't have an account?{' '}
+            Don’t have an account?{' '}
             <Link
               href="/pages/register"
               className="text-pink-500 hover:text-pink-600"
