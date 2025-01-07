@@ -1,4 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable react/no-unescaped-entities */
+
 'use client';
 import React, { Fragment, useEffect, useState } from 'react';
 import Link from 'next/link';
