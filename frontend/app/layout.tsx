@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Providers } from '@/providers';
