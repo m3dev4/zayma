@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import DeleteStore from './delete/page';
-import UpdateStore from './update/page';
+'use client';
 
 const PagePrincipal = () => {
   return <div>pagePrincipa</div>;

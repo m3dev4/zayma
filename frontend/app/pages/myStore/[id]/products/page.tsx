@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+'use client';
+
 import SideBarDashboard from '@/components/sideBarDashboard';
-import PagePrincipalProductId from './page';
 
 const Product = () => {
   return (
