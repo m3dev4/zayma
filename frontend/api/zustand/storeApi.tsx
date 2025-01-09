@@ -56,6 +56,10 @@ export const useStore = create(
         const formData = new FormData();
         formData.append('name', data.name);
         formData.append('description', data.description);
+        formData.append('phone', data.phone);
+        formData.append('address', data.address);
+        formData.append('openingHours', data.openingHours);
+
         if (data.logo) {
           formData.append('logo', data.logo);
         }

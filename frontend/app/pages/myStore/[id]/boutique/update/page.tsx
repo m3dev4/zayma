@@ -15,6 +15,9 @@ const UpdateStore = ({ store }: UpdateStoreProps) => {
   const [formData, setFormData] = useState({
     name: store.name,
     description: store.description,
+    phone: store.phone || '',
+    address: store.address || '',
+    openingHours: store.openingHours || '',
   });
   const [previewImage, setPreviewImage] = useState<string | null>(
     store.logo || null,
@@ -40,22 +43,20 @@ const UpdateStore = ({ store }: UpdateStoreProps) => {
     e.preventDefault();
     try {
       const formDataToSend = new FormData();
-
-      // Ajout des champs texte
       formDataToSend.append('name', formData.name);
       formDataToSend.append('description', formData.description);
+      formDataToSend.append('phone', formData.phone);
+      formDataToSend.append('address', formData.address);
+      formDataToSend.append('openingHours', formData.openingHours);
 
-      // Ajout du logo seulement s'il y en a un nouveau
       if (newLogo) {
         formDataToSend.append('logo', newLogo);
       }
 
-      // Envoi des données
       await updateStoreMutation.mutateAsync({
         id: store.id,
         formData: formDataToSend,
       });
-
       setOpen(false);
     } catch (error) {
       console.error('Error updating store:', error);
@@ -75,7 +76,8 @@ const UpdateStore = ({ store }: UpdateStoreProps) => {
 
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={setOpen}>
-          {/* ... Transition.Child reste le même ... */}
+          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+
           <div className="fixed inset-0 z-10 overflow-y-auto">
             <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
               <Transition.Child
@@ -88,25 +90,19 @@ const UpdateStore = ({ store }: UpdateStoreProps) => {
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
                 <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-                  <div>
-                    <Dialog.Title
-                      as="h3"
-                      className="text-lg font-medium leading-6 text-gray-900"
-                    >
-                      Modifier la boutique
-                    </Dialog.Title>
-                    <form onSubmit={handleSubmit} className="mt-5 space-y-4">
-                      {/* Image upload section */}
-                      <div className="flex flex-col items-center">
-                        <div className="relative w-32 h-32 mb-4">
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Logo Upload Section */}
+                    <div className="mt-4">
+                      <div className="flex justify-center">
+                        <div className="relative">
                           {previewImage ? (
                             <img
                               src={previewImage}
                               alt="Preview"
-                              className="w-full h-full rounded-full object-cover"
+                              className="w-32 h-32 rounded-full object-cover"
                             />
                           ) : (
-                            <div className="w-full h-full rounded-full bg-gray-200 flex items-center justify-center">
+                            <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center">
                               <PhotoIcon className="w-12 h-12 text-gray-400" />
                             </div>
                           )}
@@ -126,18 +122,16 @@ const UpdateStore = ({ store }: UpdateStoreProps) => {
                           className="hidden"
                         />
                       </div>
+                    </div>
 
-                      {/* Reste du formulaire... */}
+                    {/* Champs du formulaire */}
+                    <div className="space-y-4">
                       <div>
-                        <label
-                          htmlFor="name"
-                          className="block text-sm font-medium text-gray-700"
-                        >
+                        <label className="block text-sm font-medium text-gray-700">
                           Nom de la boutique
                         </label>
                         <input
                           type="text"
-                          id="name"
                           value={formData.name}
                           onChange={(e) =>
                             setFormData({ ...formData, name: e.target.value })
@@ -146,15 +140,12 @@ const UpdateStore = ({ store }: UpdateStoreProps) => {
                           required
                         />
                       </div>
+
                       <div>
-                        <label
-                          htmlFor="description"
-                          className="block text-sm font-medium text-gray-700"
-                        >
+                        <label className="block text-sm font-medium text-gray-700">
                           Description
                         </label>
                         <textarea
-                          id="description"
                           value={formData.description}
                           onChange={(e) =>
                             setFormData({
@@ -167,26 +158,81 @@ const UpdateStore = ({ store }: UpdateStoreProps) => {
                           required
                         />
                       </div>
-                      <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
-                        <button
-                          type="submit"
-                          disabled={updateStoreMutation.isPending}
-                          className="inline-flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm disabled:opacity-50"
-                        >
-                          {updateStoreMutation.isPending
-                            ? 'Mise à jour...'
-                            : 'Mettre à jour'}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setOpen(false)}
-                          className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm"
-                        >
-                          Annuler
-                        </button>
+
+                      {/* Nouveaux champs */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                          Téléphone
+                        </label>
+                        <input
+                          type="tel"
+                          value={formData.phone}
+                          onChange={(e) =>
+                            setFormData({ ...formData, phone: e.target.value })
+                          }
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          required
+                        />
                       </div>
-                    </form>
-                  </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                          Adresse
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.address}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              address: e.target.value,
+                            })
+                          }
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                          Horaires d'ouverture
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.openingHours}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              openingHours: e.target.value,
+                            })
+                          }
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          placeholder="Ex: Lun-Ven: 9h-18h"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    {/* Boutons d'action */}
+                    <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
+                      <button
+                        type="submit"
+                        disabled={updateStoreMutation.isPending}
+                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm disabled:opacity-50"
+                      >
+                        {updateStoreMutation.isPending
+                          ? 'Mise à jour...'
+                          : 'Mettre à jour'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setOpen(false)}
+                        className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm"
+                      >
+                        Annuler
+                      </button>
+                    </div>
+                  </form>
                 </Dialog.Panel>
               </Transition.Child>
             </div>

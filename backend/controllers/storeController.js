@@ -10,7 +10,13 @@ import fs from "fs";
 // @route   POST /api/stores
 // @access  Private
 const createStoreHandler = asyncHandler(async (req, res) => {
-  const { name, description } = req.body;
+  const { name, description, phone, address, openingHours } = req.body;
+
+  // Validation des champs obligatoires
+  if (!name || !description || !phone || !address || !openingHours) {
+    res.status(400);
+    throw new Error("Tous les champs sont obligatoires");
+  }
 
   try {
     console.log("File to upload:", req.file);
@@ -29,6 +35,9 @@ const createStoreHandler = asyncHandler(async (req, res) => {
       description,
       logo: result.secure_url,
       owner: req.user._id,
+      phone,
+      address,
+      openingHours,
     });
 
     if (store) {
@@ -55,7 +64,10 @@ const createStoreHandler = asyncHandler(async (req, res) => {
 const getStoreById = asyncHandler(async (req, res) => {
   const store = await createStore
     .findById(req.params.id)
-    .populate("owner", "firstName, lastName, email");
+    .populate(
+      "owner",
+      "firstName, lastName, email, phone, address, openingHours"
+    );
   if (store) {
     res.Json(store);
   } else {
@@ -68,7 +80,7 @@ const getStoreById = asyncHandler(async (req, res) => {
 // @route   PUT /api/stores/:id
 // @access  Private/Owner
 const updateStore = asyncHandler(async (req, res) => {
-  const { name, description } = req.body;
+  const { name, description, phone, address, openingHours } = req.body;
   const store = await createStore.findById(req.params.id);
 
   if (store) {
@@ -82,7 +94,9 @@ const updateStore = asyncHandler(async (req, res) => {
 
     store.name = name || store.name;
     store.description = description || store.description;
-
+    store.phone = phone || store.phone;
+    store.address = address || store.address;
+    store.openingHours = openingHours || store.openingHours;
     const updatedStore = await store.save();
     res.json(updatedStore);
   } else {
@@ -131,7 +145,7 @@ const getStores = asyncHandler(async (req, res) => {
   const count = await createStore.countDocuments({ ...keyword });
   const stores = await createStore
     .find({ ...keyword })
-    .populate("owner", "firstName, lastName")
+    .populate("owner", "firstName, lastName, phone, address, openingHours")
     .limit(pageSize)
     .skip(pageSize * (page - 1))
     .sort("-createdAt");
@@ -166,7 +180,7 @@ const getAllStoresAdmin = asyncHandler(async (req, res) => {
 
   const stores = await createStore
     .find({})
-    .populate("owner", "firstName lastName email")
+    .populate("owner", "firstName lastName email, phone, address, openingHours")
     .limit(pageSize)
     .skip(pageSize * (page - 1))
     .sort("-createdAt");

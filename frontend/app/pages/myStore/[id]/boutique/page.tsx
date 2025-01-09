@@ -5,7 +5,18 @@ import React from 'react';
 import UpdateStore from './update/page';
 import DeleteStore from './delete/page';
 import { useMyStores } from '@/hooks/useStoreQuery';
-import { LinkIcon, Loader2, StoreIcon, Calendar } from 'lucide-react';
+import {
+  LinkIcon,
+  Loader2,
+  StoreIcon,
+  Calendar,
+  Phone,
+  MapPin,
+  Clock,
+  Facebook,
+  Instagram,
+  MessageCircle,
+} from 'lucide-react';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 
@@ -13,6 +24,12 @@ const GetMyStore = () => {
   const { data: stores, isLoading } = useMyStores();
   const store = stores?.[0];
   const storeLink = `${process.env.NEXT_PUBLIC_FRONTEND_URL}/store/${store?._id}`;
+
+  // Ajouter ces logs pour déboguer
+  console.log('Store data:', store);
+  console.log('Phone:', store?.phone);
+  console.log('Address:', store?.address);
+  console.log('Opening Hours:', store?.openingHours);
 
   if (isLoading) {
     return (
@@ -103,7 +120,31 @@ const GetMyStore = () => {
                       </div>
                     </div>
 
-                    {/* Date de création */}
+                    {/* Nouveaux champs */}
+                    <div className="bg-white/5 rounded-xl p-6 backdrop-blur-sm hover:bg-white/10 transition duration-300 transform hover:-translate-y-1">
+                      <h2 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                        <Phone className="w-5 h-5 text-blue-400" />
+                        Téléphone
+                      </h2>
+                      <p className="text-gray-300">{store.phone}</p>
+                    </div>
+
+                    <div className="bg-white/5 rounded-xl p-6 backdrop-blur-sm hover:bg-white/10 transition duration-300 transform hover:-translate-y-1">
+                      <h2 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                        <MapPin className="w-5 h-5 text-blue-400" />
+                        Adresse
+                      </h2>
+                      <p className="text-gray-300">{store.address}</p>
+                    </div>
+
+                    <div className="bg-white/5 rounded-xl p-6 backdrop-blur-sm hover:bg-white/10 transition duration-300 transform hover:-translate-y-1">
+                      <h2 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                        <Clock className="w-5 h-5 text-blue-400" />
+                        Horaires d'ouverture
+                      </h2>
+                      <p className="text-gray-300">{store.openingHours}</p>
+                    </div>
+
                     <div className="bg-white/5 rounded-xl p-6 backdrop-blur-sm hover:bg-white/10 transition duration-300 transform hover:-translate-y-1">
                       <h2 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
                         <Calendar className="w-5 h-5 text-blue-400" />

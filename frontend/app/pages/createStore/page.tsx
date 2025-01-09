@@ -16,13 +16,23 @@ import toast from 'react-hot-toast';
 const CreateStore = () => {
   const router = useRouter();
   const [step, setStep] = useState<
-    'terms' | 'name' | 'description' | 'logo' | 'summary'
+    | 'terms'
+    | 'name'
+    | 'description'
+    | 'logo'
+    | 'phone'
+    | 'address'
+    | 'openingHours'
+    | 'summary'
   >('terms');
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     logo: null as File | null,
+    phone: '',
+    address: '',
+    openingHours: '',
   });
   const [previewLogo, setPreviewLogo] = useState<string>('');
   const { mutate: createStore, isPending } = useCreateStore();
@@ -34,10 +44,14 @@ const CreateStore = () => {
       setStep('terms');
     } else if (step === 'description') {
       setStep('name');
-    } else if (step === 'logo') {
+    } else if (step === 'phone') {
       setStep('description');
+    } else if (step === 'address') {
+      setStep('phone');
+    } else if (step === 'openingHours') {
+      setStep('address');
     } else if (step === 'summary') {
-      setStep('logo');
+      setStep('openingHours');
     }
   };
 
@@ -53,6 +67,12 @@ const CreateStore = () => {
     } else if (step === 'name' && formData.name) {
       setStep('description');
     } else if (step === 'description' && formData.description) {
+      setStep('phone');
+    } else if (step === 'phone' && formData.phone) {
+      setStep('address');
+    } else if (step === 'address' && formData.address) {
+      setStep('openingHours');
+    } else if (step === 'openingHours' && formData.openingHours) {
       setStep('logo');
     } else if (step === 'logo') {
       setStep('summary');
@@ -67,11 +87,11 @@ const CreateStore = () => {
       toast.success('Boutique créée avec succès !');
       router.push('/');
     } catch (error) {
-      console.error('Erreur lors de la création du boutique');
+      console.error('Erreur lors de la création de la boutique:', error);
+      toast.error(
+        "Une erreur s'est produite lors de la création de la boutique",
+      );
     }
-    toast.error(
-      "Une erreur s'est produite lors de la creation du boutique veuillez réessayer",
-    );
   };
 
   return (
@@ -202,6 +222,129 @@ const CreateStore = () => {
             </div>
           )}
 
+          {step === 'phone' && (
+            <div className="p-8">
+              <h2 className="font-serif text-white text-2xl font-bold mb-6 ">
+                Numéro de téléphone
+              </h2>
+              <input
+                value={formData.phone}
+                onChange={(e) =>
+                  setFormData({ ...formData, phone: e.target.value })
+                }
+                placeholder="Entrez le numéro de téléphone"
+                className="w-full p-3 border-none outline-none rounded-lg mb-6"
+              />
+              <div className="flex justify-between">
+                <Button
+                  className="bg-gray-700
+                  cursor-pointer
+                  hover:bg-slate-500
+                  text-white
+                  py-2
+                  rounded-lg
+                  px-6"
+                  onClick={handleBack}
+                >
+                  Retour
+                </Button>
+                <Button
+                  onClick={handleContinue}
+                  disabled={!formData.phone}
+                  className={`px-6 cursor-pointer py-2 rounded-lg text-white ${
+                    formData.phone
+                      ? 'bg-cyan-800 hover:bg-cyan-900'
+                      : 'bg-gray-400 cursor-not-allowed'
+                  }`}
+                >
+                  Continue
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {step === 'address' && (
+            <div className="p-8">
+              <h2 className="font-serif text-white text-2xl font-bold mb-6 ">
+                Address de la boutique
+              </h2>
+              <Input
+                value={formData.address}
+                onChange={(e) =>
+                  setFormData({ ...formData, address: e.target.value })
+                }
+                placeholder="Entrez l'adresse du boutique'"
+                className="w-full p-3 border-none outline-none rounded-lg mb-6"
+              />
+              <div className="flex justify-between">
+                <Button
+                  className="bg-gray-700
+                  cursor-pointer
+                  hover:bg-slate-500
+                  text-white
+                  py-2
+                  rounded-lg
+                  px-6"
+                  onClick={handleBack}
+                >
+                  Retour
+                </Button>
+                <Button
+                  onClick={handleContinue}
+                  disabled={!formData.address}
+                  className={`px-6 cursor-pointer py-2 rounded-lg text-white ${
+                    formData.address
+                      ? 'bg-cyan-800 hover:bg-cyan-900'
+                      : 'bg-gray-400 cursor-not-allowed'
+                  }`}
+                >
+                  Continue
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {step === 'openingHours' && (
+            <div className="p-8">
+              <h2 className="font-serif text-white text-2xl font-bold mb-6 ">
+                Heure d'ouverture de la boutique
+              </h2>
+              <Textarea
+                value={formData.openingHours}
+                onChange={(e) =>
+                  setFormData({ ...formData, openingHours: e.target.value })
+                }
+                placeholder="ex: Lun - Ven 09:00 - 18:00"
+                className="w-full p-3 border-none outline-none rounded-lg mb-6"
+              />
+              <div className="flex justify-between">
+                <Button
+                  className="bg-gray-700
+                  cursor-pointer
+                  hover:bg-slate-500
+                  text-white
+                  py-2
+                  rounded-lg
+                  px-6"
+                  onClick={handleBack}
+                >
+                  Retour
+                </Button>
+                <Button
+                  onClick={handleContinue}
+                  disabled={!formData.openingHours}
+                  className={`px-6 cursor-pointer py-2 rounded-lg text-white ${
+                    formData.openingHours
+                      ? 'bg-cyan-800 hover:bg-cyan-900'
+                      : 'bg-gray-400 cursor-not-allowed'
+                  }`}
+                >
+                  Continue
+                </Button>
+              </div>
+            </div>
+          )}
+
           {step === 'logo' && (
             <div className="p-8">
               <h2 className="text-2xl font-serif text-white font-bold mb-6">
@@ -247,6 +390,22 @@ const CreateStore = () => {
                 <div>
                   <h3 className="font-semibold text-white">Description</h3>
                   <p className="text-gray-300">{formData.description}</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white">
+                    Numéro de téléphone
+                  </h3>
+                  <p className="text-gray-300">{formData.phone}</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white">Adresse</h3>
+                  <p className="text-gray-300">{formData.address}</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white">
+                    Heure d'ouverture
+                  </h3>
+                  <p className="text-gray-300">{formData.openingHours}</p>
                 </div>
                 {previewLogo && (
                   <div>

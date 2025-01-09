@@ -8,6 +8,9 @@ export interface CreateStorePayload {
     name: string
     description: string
     logo: File | null
+    phone: string
+    address: string
+    openingHours: string
 }
 
 export interface Store {
@@ -20,4 +23,7 @@ export interface Store {
     isActive: boolean
     link?: string
     createdAt: string
+    phone: string
+    address: string
+    openingHours: string
 }

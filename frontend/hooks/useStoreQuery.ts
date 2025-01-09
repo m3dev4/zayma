@@ -18,7 +18,10 @@ export const useCreateStore = () => {
     const queryClient = useQueryClient()
 
     return useMutation<Store, Error, CreateStorePayload>({
-        mutationFn: createStore,
+        mutationFn: (data) => {
+            console.log('Creating store with data:', data);
+            return createStore(data);
+        },
         onSuccess: (newStore) => {
             queryClient.invalidateQueries({ queryKey: STORE_KEYS.all })
             queryClient.invalidateQueries({ queryKey: STORE_KEYS.myStores })
@@ -55,7 +58,10 @@ export const useUpdateStore = (id: string) => {
     const queryClient = useQueryClient()
 
     return useMutation<Store, Error, { id: string; formData: FormData }>({
-        mutationFn: ({ formData }) => updateStore(id, formData),
+        mutationFn: ({ formData }) => {
+            console.log('Updating store with data:', Object.fromEntries(formData));
+            return updateStore(id, formData);
+        },
         onSuccess: (updatedStore) => {
             queryClient.invalidateQueries({ queryKey: STORE_KEYS.all })
             queryClient.invalidateQueries({ queryKey: STORE_KEYS.store(id) })
