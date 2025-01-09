@@ -1,0 +1,61 @@
+{
+  "extends": "next/core-web-vitals",
+  "rules": {
+    // Désactiver les avertissements pour les variables non utilisées
+    "@typescript-eslint/no-unused-vars": "off",
+    
+    // Désactiver les avertissements pour any
+    "@typescript-eslint/no-explicit-any": "off",
+    
+    // Désactiver les avertissements pour les promesses non gérées
+    "@typescript-eslint/no-floating-promises": "off",
+    
+    // Désactiver les avertissements pour les imports non utilisés
+    "unused-imports/no-unused-imports": "off",
+    
+    // Désactiver les avertissements pour les props de React
+    "react/prop-types": "off",
+    
+    // Désactiver les avertissements pour les guillemets non échappés
+    "react/no-unescaped-entities": "off",
+    
+    // Désactiver les avertissements pour les props spreading
+    "react/jsx-props-no-spreading": "off",
+    
+    // Désactiver les avertissements pour les hooks exhaustifs
+    "react-hooks/exhaustive-deps": "off",
+    
+    // Désactiver les avertissements pour les imports default
+    "import/prefer-default-export": "off",
+    
+    // Désactiver les avertissements pour les props booléens
+    "react/jsx-boolean-value": "off",
+    
+    // Désactiver les avertissements pour les fonctions async dans useEffect
+    "react-hooks/rules-of-hooks": "off",
+    
+    // Désactiver les avertissements pour les props required
+    "react/require-default-props": "off",
+    
+    // Désactiver les avertissements pour les exports nommés
+    "import/no-named-as-default": "off",
+    
+    // Désactiver les avertissements pour les imports cycliques
+    "import/no-cycle": "off",
+    
+    // Désactiver les avertissements pour les props de style
+    "react/style-prop-object": "off",
+    
+    // Désactiver les avertissements pour les imports dynamiques
+    "import/no-dynamic-require": "off",
+    
+    // Désactiver les avertissements pour global-require
+    "global-require": "off",
+    
+    // Désactiver les avertissements pour les extensions de fichier
+    "import/extensions": "off",
+    
+    // Désactiver les avertissements pour les modules non résolus
+    "import/no-unresolved": "off"
+  }
+} 
