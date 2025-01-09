@@ -1,10 +1,12 @@
+import SideBarDashboard from '@/components/sideBarDashboard';
 import PagePrincipalProductId from './[productId]/page';
 
 const Product = () => {
   return (
-    <div>
-      Product
-      <PagePrincipalProductId />
+    <div className="w-full min-h-screen h-screen bg-primary overflow-hidden">
+      <div className="p-0 w-full m-auto">
+        <SideBarDashboard />
+      </div>
     </div>
   );
 };

@@ -230,7 +230,7 @@ const Page = () => {
                             <Menu.Items className="absolute left-full top-0 ml-2 w-48 rounded-md bg-[#2A2A2A] shadow-lg">
                               <Menu.Item>
                                 <Link
-                                  href={`/pages/myStore/${userStore._id}/update`}
+                                  href={`/pages/myStore/${userStore._id}/boutique`}
                                   className="block px-4 py-2 text-sm text-white hover:bg-[#363636]"
                                 >
                                   Mise à jour
@@ -238,7 +238,7 @@ const Page = () => {
                               </Menu.Item>
                               <Menu.Item>
                                 <Link
-                                  href="pages/myStore/delete"
+                                  href={`/pages/myStore/${userStore._id}/boutique`}
                                   className="block px-4 py-2 text-sm text-white hover:bg-[#363636]"
                                 >
                                   Supprimer
