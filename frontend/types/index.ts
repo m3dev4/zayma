@@ -11,6 +11,7 @@ export interface CreateStorePayload {
 }
 
 export interface Store {
+    id: string
     _id: string
     name: string
     description: string
@@ -18,4 +19,5 @@ export interface Store {
     owner: string
     isActive: boolean
     link?: string
+    createdAt: string
 }

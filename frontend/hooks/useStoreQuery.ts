@@ -54,8 +54,8 @@ export const useUpdateStore = (id: string) => {
     const { updateStore } = useStore.getState()
     const queryClient = useQueryClient()
 
-    return useMutation<Store, Error, Partial<Store>>({
-        mutationFn: (data) => updateStore(id, data),
+    return useMutation<Store, Error, { id: string; formData: FormData }>({
+        mutationFn: ({ formData }) => updateStore(id, formData),
         onSuccess: (updatedStore) => {
             queryClient.invalidateQueries({ queryKey: STORE_KEYS.all })
             queryClient.invalidateQueries({ queryKey: STORE_KEYS.store(id) })
@@ -79,7 +79,7 @@ export const useDeleteStore = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: STORE_KEYS.all })
             queryClient.invalidateQueries({ queryKey: STORE_KEYS.myStores })
-            queryClient.invalidateQueries({ queryKey: STORE_KEYS.adminStore })
+            queryClient.invalidateQueries({ queryKey: STORE_KEYS.adminStores })
             toast.success('Boutique supprimée')
         }, onError(error: Error) {
             toast.error(error.message || 'Erreur lors de la suppression de la boutique')
@@ -91,7 +91,7 @@ export const useDeleteStore = () => {
 export const useAdminStore = (options?: { enabled?: boolean }) => {
     const { getAdminStores } = useStore.getState()
     return useQuery<Store[], Error>({
-        queryKey: STORE_KEYS.adminStore,
+        queryKey: STORE_KEYS.adminStores,
         queryFn: getAdminStores,
         ...options
     })

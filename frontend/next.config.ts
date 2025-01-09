@@ -3,7 +3,11 @@ import type { NextConfig } from "next";
 import path from "path";
 
 const nextConfig: NextConfig = {
+
   reactStrictMode: true,
+  images: {
+    domains: ["res.cloudinary.com"],
+  },
   webpack: (config) => {
     config.module.rules.push({
       test: /\.(png|jpe?g|gif|svg|webp)$/i,
@@ -37,6 +41,7 @@ const nextConfig: NextConfig = {
 
     return config;
   },
+
 };
 
 

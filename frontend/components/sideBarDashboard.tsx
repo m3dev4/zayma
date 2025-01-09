@@ -11,7 +11,6 @@ import {
   Star,
   ChevronLeft,
   ChevronRight,
-  User,
 } from 'lucide-react';
 import authApiStore from '@/api/zustand/authApi';
 import { useStore } from '@/api/zustand/storeApi';
@@ -23,7 +22,6 @@ const SideBarDashboard = () => {
   const { user } = authApiStore();
   const { getMyStores } = useStore();
 
-  // Fetch store data once when component mounts
   useEffect(() => {
     const fetchUserStore = async () => {
       if (user) {
@@ -40,100 +38,84 @@ const SideBarDashboard = () => {
     fetchUserStore();
   }, [user, getMyStores]);
 
-  // Generate navigation items only after storeId is available
-  const getNavItems = () => [
+  const navItems = [
     {
       label: 'Dashboard',
       href: `/pages/myStore/${storeId}/dashboard`,
       icon: LayoutDashboard,
-      needsStore: true,
     },
     {
       label: 'Boutique',
       href: `/pages/myStore/${storeId}/boutique`,
       icon: Store,
-      needsStore: true,
     },
     {
       label: 'Produits',
       href: `/pages/myStore/${storeId}/products`,
       icon: Package,
-      needsStore: true,
     },
     {
       label: 'Commandes',
       href: `/pages/myStore/${storeId}/orders`,
       icon: ShoppingCart,
-      needsStore: true,
     },
     {
       label: 'Messages',
       href: '/messages',
       icon: MessageSquare,
-      needsStore: false,
     },
     {
       label: 'Avis',
       href: '/reviews',
       icon: Star,
-      needsStore: false,
     },
   ];
-
-  // Filter navigation items based on storeId availability
-  const navItems = getNavItems().filter(
-    (item) => !item.needsStore || (item.needsStore && storeId),
-  );
 
   return (
     <aside
       className={`
-        relative
+        fixed
+        left-0
+        top-0
         h-screen
         transition-all
-        duration-500
+        duration-300
+        ease-in-out
         ${collapsed ? 'w-20' : 'w-72'}
         bg-gradient-to-br
-        from-gray-900
-        to-gray-800
-        shadow-[8px_0_30px_-12px_rgba(0,0,0,0.75)]
+        from-gray-900/95
+        to-gray-950/95
         backdrop-blur-xl
-        overflow-hidden
+        border-r
+        border-white/10
+        shadow-[0_0_15px_rgba(0,0,0,0.2)]
+        z-50
       `}
     >
-      {/* Glowing effect background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 via-purple-500/5 to-pink-500/5 opacity-30" />
-
-      {/* Glass effect overlay */}
-      <div className="absolute inset-0 backdrop-blur-sm bg-black/10" />
-
-      {/* Content container */}
-      <div className="relative z-10 h-full flex flex-col">
-        {/* Header */}
-        <div className="p-6 flex items-center justify-between border-b border-white/10">
+      {/* Contenu du sidebar */}
+      <div className="flex flex-col h-full relative">
+        {/* Header avec bouton toggle */}
+        <div className="flex items-center justify-between p-4 border-b border-white/10">
           {!collapsed && (
-            <Link
-              href="/"
-              className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
-            >
-              Zayma
-            </Link>
+            <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
+              <Link href="/">Zayma</Link>
+            </span>
           )}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-all duration-300 border border-white/20 hover:border-white/40"
+            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
           >
             {collapsed ? (
-              <ChevronRight className="w-4 h-4 text-white" />
+              <ChevronRight className="w-5 h-5 text-gray-400" />
             ) : (
-              <ChevronLeft className="w-4 h-4 text-white" />
+              <ChevronLeft className="w-5 h-5 text-gray-400" />
             )}
           </button>
         </div>
 
         {/* Navigation */}
         <nav className="flex-1 px-4 py-6">
-          <ul className="space-y-3">
+          <ul className="space-y-2">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (
@@ -144,77 +126,93 @@ const SideBarDashboard = () => {
                       relative
                       flex
                       items-center
+                      gap-4
                       px-4
                       py-3
                       rounded-xl
                       transition-all
                       duration-300
+                      group
                       ${
                         isActive
-                          ? 'bg-white/10 shadow-[inset_0_1px_3px_rgba(0,0,0,0.3)]'
+                          ? 'bg-gradient-to-r from-blue-500/10 to-purple-500/10'
                           : 'hover:bg-white/5'
                       }
-                      group
                     `}
                   >
-                    {/* Icon container with inner circle effect */}
+                    {/* Icône avec effet de glow */}
                     <div
                       className={`
                         relative
-                        w-10
-                        h-10
-                        flex
-                        items-center
-                        justify-center
-                        rounded-full
+                        rounded-lg
+                        p-2
                         transition-transform
                         duration-300
-                        ${isActive ? 'scale-110' : 'group-hover:scale-110'}
+                        ${isActive ? 'text-blue-400' : 'text-gray-400'}
+                        group-hover:scale-110
+                        group-hover:text-blue-400
                       `}
                     >
-                      {/* Outer glow */}
-                      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 blur-sm" />
-
-                      {/* Inner circle */}
-                      <div className="absolute inset-1 rounded-full bg-gradient-to-br from-gray-800 to-gray-900 shadow-inner" />
-
-                      {/* Icon */}
-                      <item.icon
+                      <div
                         className={`
-                          relative
-                          w-5 
-                          h-5
-                          transition-colors
+                          absolute
+                          inset-0
+                          rounded-lg
+                          bg-blue-400/20
+                          blur-sm
+                          opacity-0
+                          group-hover:opacity-100
+                          transition-opacity
                           duration-300
-                          ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-white'}
                         `}
                       />
+                      <item.icon className="w-5 h-5 relative z-10" />
                     </div>
 
                     {/* Label */}
                     {!collapsed && (
                       <span
                         className={`
-                          ml-4
                           text-sm
                           font-medium
                           transition-colors
                           duration-300
-                          ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-white'}
+                          ${
+                            isActive
+                              ? 'text-blue-400'
+                              : 'text-gray-400 group-hover:text-blue-400'
+                          }
                         `}
                       >
                         {item.label}
                       </span>
                     )}
 
-                    {/* Hover highlight effect */}
-                    <div className="absolute inset-0 rounded-xl bg-white/0 group-hover:bg-white/5 transition-colors duration-300" />
+                    {/* Indicateur actif */}
+                    {isActive && (
+                      <div className="absolute right-2 w-1.5 h-1.5 rounded-full bg-blue-400" />
+                    )}
                   </Link>
                 </li>
               );
             })}
           </ul>
         </nav>
+
+        {/* Footer */}
+        <div className="p-4 border-t border-white/10">
+          <div className="flex items-center gap-3 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-purple-400" />
+            {!collapsed && (
+              <div>
+                <p className="text-sm font-medium text-gray-200">
+                  {user?.firstName} {user?.lastName}
+                </p>
+                <p className="text-xs text-gray-400">{user?.email}</p>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </aside>
   );

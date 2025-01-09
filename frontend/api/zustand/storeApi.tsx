@@ -31,7 +31,7 @@ interface StoreState extends StoreFormState {
   getStores: () => Promise<Store[]>;
   getMyStores: () => Promise<Store[]>;
   getStoreById: (id: string) => Promise<Store>;
-  updateStore: (id: string, data: Partial<Store>) => Promise<Store>;
+  updateStore: (id: string, formData: FormData) => Promise<Store>;
   deleteStore: (id: string) => Promise<void>;
   getAdminStores: () => Promise<Store[]>;
   getStoreStats: () => Promise<any>;
@@ -124,10 +124,14 @@ export const useStore = create(
       }
     },
 
-    updateStore: async (id: string, data: Partial<Store>) => {
+    updateStore: async (id: string, formData: FormData) => {
       set({ loading: true, error: null });
       try {
-        const response = await api.put(`/${id}`, data);
+        const response = await api.put(`/${id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
         set({ store: response.data, loading: false });
         return response.data;
       } catch (error: any) {
