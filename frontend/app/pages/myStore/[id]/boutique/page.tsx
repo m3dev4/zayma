@@ -165,9 +165,9 @@ const GetMyStore = () => {
                     <div className="flex-1 transform hover:scale-[1.02] transition-all duration-300">
                       <UpdateStore store={store} />
                     </div>
-                    <div className="transform hover:scale-[1.02] transition-all duration-300">
+                    {/* <div className="transform hover:scale-[1.02] transition-all duration-300">
                       {store && <DeleteButton storeId={store._id} />}
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               )}
