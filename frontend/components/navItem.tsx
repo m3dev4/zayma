@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { Input } from '@headlessui/react';
 import Link from 'next/link';
 import React from 'react';
