@@ -5,11 +5,11 @@ import { useDeleteStore } from '@/hooks/useStoreQuery';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
-interface DeleteStoreProps {
+interface Props {
   storeId: string;
 }
 
-const DeleteStore = ({ storeId }: DeleteStoreProps) => {
+const DeleteStore = ({ storeId }: Props) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { mutate: deleteStore, isPending } = useDeleteStore();
   const router = useRouter();
