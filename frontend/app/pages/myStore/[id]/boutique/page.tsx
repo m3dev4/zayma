@@ -13,9 +13,6 @@ import {
   Phone,
   MapPin,
   Clock,
-  Facebook,
-  Instagram,
-  MessageCircle,
 } from 'lucide-react';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
