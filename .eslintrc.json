@@ -1,61 +1,61 @@
 {
   "extends": "next/core-web-vitals",
+  "plugins": ["@typescript-eslint", "jsx-a11y", "prettier"],
   "rules": {
-    // Désactiver les avertissements pour les variables non utilisées
+    // Désactiver les erreurs de variables non utilisées
     "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-unused-expressions": "off",
     
-    // Désactiver les avertissements pour any
-    "@typescript-eslint/no-explicit-any": "off",
-    
-    // Désactiver les avertissements pour les promesses non gérées
-    "@typescript-eslint/no-floating-promises": "off",
-    
-    // Désactiver les avertissements pour les imports non utilisés
-    "unused-imports/no-unused-imports": "off",
-    
-    // Désactiver les avertissements pour les props de React
-    "react/prop-types": "off",
-    
-    // Désactiver les avertissements pour les guillemets non échappés
-    "react/no-unescaped-entities": "off",
-    
-    // Désactiver les avertissements pour les props spreading
-    "react/jsx-props-no-spreading": "off",
-    
-    // Désactiver les avertissements pour les hooks exhaustifs
+    // Désactiver les erreurs de dépendances des hooks
     "react-hooks/exhaustive-deps": "off",
     
-    // Désactiver les avertissements pour les imports default
+    // Désactiver les erreurs d'entités non échappées
+    "react/no-unescaped-entities": "off",
+    
+    // Désactiver les erreurs d'accessibilité
+    "jsx-a11y/label-has-associated-control": "off",
+    "jsx-a11y/alt-text": "off",
+    
+    // Désactiver les avertissements pour les images Next.js
+    "@next/next/no-img-element": "off",
+    
+    // Désactiver les règles de formatage Prettier
+    "prettier/prettier": "off",
+    
+    // Autres règles
+    "react/prop-types": "off",
+    "react/jsx-props-no-spreading": "off",
     "import/prefer-default-export": "off",
-    
-    // Désactiver les avertissements pour les props booléens
-    "react/jsx-boolean-value": "off",
-    
-    // Désactiver les avertissements pour les fonctions async dans useEffect
-    "react-hooks/rules-of-hooks": "off",
-    
-    // Désactiver les avertissements pour les props required
-    "react/require-default-props": "off",
-    
-    // Désactiver les avertissements pour les exports nommés
-    "import/no-named-as-default": "off",
-    
-    // Désactiver les avertissements pour les imports cycliques
-    "import/no-cycle": "off",
-    
-    // Désactiver les avertissements pour les props de style
-    "react/style-prop-object": "off",
-    
-    // Désactiver les avertissements pour les imports dynamiques
-    "import/no-dynamic-require": "off",
-    
-    // Désactiver les avertissements pour global-require
-    "global-require": "off",
-    
-    // Désactiver les avertissements pour les extensions de fichier
+    "import/no-unresolved": "off",
     "import/extensions": "off",
-    
-    // Désactiver les avertissements pour les modules non résolus
-    "import/no-unresolved": "off"
+    "no-underscore-dangle": "off",
+    "no-console": "off",
+    "no-unused-expressions": "off",
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/ban-types": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   }
 } 

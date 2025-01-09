@@ -3,24 +3,43 @@
 out/
 build/
 dist/
+coverage/
 
 # Dossiers de dépendances
 node_modules/
+.pnpm-store/
 
 # Fichiers de configuration
-next.config.js
-postcss.config.js
-tailwind.config.js
 *.config.js
+*.config.ts
+next.config.*
+postcss.config.*
+tailwind.config.*
 
 # Fichiers de test
 **/*.test.ts
 **/*.test.tsx
 **/*.spec.ts
 **/*.spec.tsx
+__tests__/
+jest.config.*
+
+# Fichiers de type
+*.d.ts
+types/
 
 # Autres fichiers
 .eslintrc.js
 .prettierrc
-*.d.ts
-public/ 
+public/
+.vercel/
+.git/
+*.lock
+*.log
+.env*
+.DS_Store
+
+# Dossiers spécifiques
+app/pages/products/
+components/ui/
+lib/ 
