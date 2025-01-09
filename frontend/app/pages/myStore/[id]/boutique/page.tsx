@@ -4,7 +4,6 @@
 import SideBarDashboard from '@/components/sideBarDashboard';
 import React from 'react';
 import UpdateStore from './update/page';
-import { DeleteButton } from './delete/page';
 import { useMyStores } from '@/hooks/useStoreQuery';
 import {
   LinkIcon,
