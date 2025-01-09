@@ -1,16 +1,15 @@
+/* eslint-disable react/no-unescaped-entities */
 'use client';
-
 import { useState } from 'react';
 import { useDeleteStore } from '@/hooks/useStoreQuery';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
-// Créer un composant séparé pour la fonctionnalité de suppression
-interface DeleteButtonProps {
+interface DeleteStoreProps {
   storeId: string;
 }
 
-const DeleteButton = ({ storeId }: DeleteButtonProps) => {
+const DeleteStore = ({ storeId }: DeleteStoreProps) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { mutate: deleteStore, isPending } = useDeleteStore();
   const router = useRouter();
@@ -35,6 +34,7 @@ const DeleteButton = ({ storeId }: DeleteButtonProps) => {
 
   return (
     <div className="relative">
+      {/* Bouton de suppression */}
       <button
         onClick={() => setShowConfirmation(true)}
         className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors duration-300 flex items-center gap-2"
@@ -57,6 +57,7 @@ const DeleteButton = ({ storeId }: DeleteButtonProps) => {
         {isPending ? 'Suppression...' : 'Supprimer la boutique'}
       </button>
 
+      {/* Modal de confirmation */}
       {showConfirmation && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
@@ -89,10 +90,4 @@ const DeleteButton = ({ storeId }: DeleteButtonProps) => {
   );
 };
 
-// Page component sans props
-const DeleteStorePage = () => {
-  return null; // Cette page ne rend rien directement
-};
-
-export default DeleteStorePage;
-export { DeleteButton }; // Exporter le composant avec props séparément
+export default DeleteStore;
