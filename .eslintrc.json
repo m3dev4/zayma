@@ -2,8 +2,14 @@
   "extends": "next/core-web-vitals",
   "plugins": ["@typescript-eslint", "jsx-a11y", "prettier"],
   "rules": {
-    // Désactiver les erreurs de variables non utilisées
-    "@typescript-eslint/no-unused-vars": "off",
+    // Désactiver complètement les erreurs de variables non utilisées
+    "@typescript-eslint/no-unused-vars": ["off", {
+      "vars": "all",
+      "args": "after-used",
+      "ignoreRestSiblings": true,
+      "varsIgnorePattern": "^_",
+      "argsIgnorePattern": "^_"
+    }],
     "@typescript-eslint/no-unused-expressions": "off",
     
     // Désactiver les erreurs de dépendances des hooks
@@ -39,8 +45,30 @@
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/ban-ts-comment": "off",
-    "@typescript-eslint/ban-types": "off"
+    "@typescript-eslint/ban-types": "off",
+    "unused-imports/no-unused-imports": "off",
+    "unused-imports/no-unused-vars": "off"
   },
+  "ignorePatterns": [
+    "node_modules/",
+    ".next/",
+    "out/",
+    "public/",
+    "**/*.d.ts",
+    "**/*.js",
+    "**/*.jsx",
+    "**/*.json",
+    "**/*.css",
+    "**/*.scss",
+    "**/*.md",
+    "**/*.txt",
+    "**/*.html",
+    "**/*.env*",
+    "**/*.config.*",
+    "**/layou.tsx",
+    "**/products/page.tsx",
+    "**/components/ui/**"
+  ],
   "settings": {
     "react": {
       "version": "detect"

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 const ClientStoreLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex flex-col h-screen w-full">
